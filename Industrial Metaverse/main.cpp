@@ -6,9 +6,9 @@
 int du = 90, OriX = -1, OriY = -1;   //du是视点和x轴的夹角
 float r = 4, h = 0.0;   //r是视点绕y轴的半径，h是视点高度即在y轴上的坐标
 float c = PI / 180.0;    //弧度和角度转换参数
-float camera_left_distance = 0;//相机坐标系下向左移动距离
-float camera_up_distance = 0;//相机坐标系下向上移动距离
-float camera_front_distance = 0;//相机坐标系下向前移动距离
+float characterX = 0;	//世界坐标系人物向左移动距离
+float characterY = 0;	//相机坐标系人物向上移动距离
+float characterZ = 0;	//相机坐标系人物向前移动距离
 Camera camera;					//摄像头实例化
 CSkyBox skybox;					//天空盒实例化						
 LightMaterial lightMaterial;	//光源
@@ -24,9 +24,10 @@ void drawGround() {
 
 void draw_sky()
 {
-	skybox.CreateSkyBox(camera_front_distance * cos(c * du) - camera_left_distance * sin(c * du),
+	/*skybox.CreateSkyBox(camera_front_distance * cos(c * du) - camera_left_distance * sin(c * du),
 		camera_up_distance,
-		+camera_front_distance * sin(c * du) + camera_left_distance * cos(c * du),50.0,50.0,50.0);
+		+camera_front_distance * sin(c * du) + camera_left_distance * cos(c * du),50.0,50.0,50.0);*/
+	skybox.CreateSkyBox(camera.mPos.m_x, camera.mPos.m_y, camera.mPos.m_z, 50, 50, 50);
 }
 
 void display()
@@ -41,7 +42,10 @@ void display()
 	glLightfv(GL_LIGHT0, GL_POSITION, light_pos);
 	glLightfv(GL_LIGHT0, GL_AMBIENT, white);
 	glEnable(GL_LIGHT0);
+	glPushMatrix();
+	glTranslatef(-2.0f, 0, -2.0f);
 	glutSolidTeapot(1);
+	glPopMatrix();
 	draw_sky();
 	drawGround();
 	glutSwapBuffers();
@@ -65,38 +69,37 @@ void reshape(int width, int height)
 
 void key(unsigned char k, int x, int y)
 {
+	float moveSpeed = 0.1;
+	float radian = du * PI / 180.0;
 	switch (k) {
-	case 'a':
-	{
-		camera_left_distance += 0.05f;
-		break;
-	}
-	case 'd':
-	{
-		camera_left_distance -= 0.05f;
-		break;
-	}
+	case 'W':
 	case 'w':
-	{
-		camera_front_distance -= 0.05f;
+		characterX += moveSpeed * cos(radian); // 向前
+		characterZ += moveSpeed * sin(radian);
 		break;
-	}
+	case 'S':
 	case 's':
-	{
-		camera_front_distance += 0.05f;
+		characterX -= moveSpeed * cos(radian); // 向后
+		characterZ -= moveSpeed * sin(radian);
 		break;
-	}
+	case 'D':
+	case 'd':
+		characterX -= moveSpeed * sin(radian); // 向右
+		characterZ += moveSpeed * cos(radian);
+		break;
+	case 'A':
+	case 'a':
+		characterX += moveSpeed * sin(radian); // 向左
+		characterZ -= moveSpeed * cos(radian);
+		break;
+	case 'Q':
 	case 'q':
-	{
-		camera_up_distance += 0.05f;
+		characterY += 0.1;					//向上
 		break;
-	}
+	case 'E':
 	case 'e':
-	{
-		camera_up_distance -= 0.05f;
+		characterY -= 0.1;					//向下
 		break;
-	}
-	default:break;
 	}
 }
 
@@ -114,10 +117,11 @@ void Mouse(int button, int state, int x, int y)
 
 void onMouseMove(int x, int y)   //处理鼠标拖动
 {
-	du += 0.4*(x - OriX); //鼠标在窗口x轴方向上的增量加到视点与x轴的夹角上，就可以左右转
-	h += 0.03 * (y - OriY);  //鼠标在窗口y轴方向上的改变加到视点y的坐标上，就可以上下转
-	if (h > 1.0)   h = 1.0;  //对视点y坐标作一些限制，不会使视点太奇怪
-	else if (h < -1.0) h = -1.0;
+	du += 0.5*(x - OriX); //鼠标在窗口x轴方向上的增量加到视点与x轴的夹角上，就可以左右转
+	h += 0.25 * (y - OriY);  //鼠标在窗口y轴方向上的改变加到视点y的坐标上，就可以上下转
+	// 限制垂直视角，避免过度旋转
+    if (h > 60.0) h = 60.0;
+    else if (h < -60.0) h = -60.0;
 	OriX = x, OriY = y;  //将此时的坐标作为旧值，为下一次计算增量做准备
 }
 
