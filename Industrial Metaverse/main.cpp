@@ -17,16 +17,22 @@ LightMaterial lightMaterial;	//光源
 int WindowWidth = WINDOW_WIDTH;	
 int WindowHeight = WINDOW_HEIGHT;
 
-void drawGround() {
+//绘制基本体素
+void draw_Base() {
 	Ground* ground = new Ground(0, 0, 0);
 	ground->draw();
+	Circle* circle = new Circle(0, 0, 0, 2);
+	circle->draw();
 }
+
 
 void draw_sky()
 {
 	/*skybox.CreateSkyBox(camera_front_distance * cos(c * du) - camera_left_distance * sin(c * du),
 		camera_up_distance,
 		+camera_front_distance * sin(c * du) + camera_left_distance * cos(c * du),50.0,50.0,50.0);*/
+
+
 	skybox.CreateSkyBox(camera.mPos.m_x, camera.mPos.m_y, camera.mPos.m_z, 50, 50, 50);
 }
 
@@ -42,12 +48,13 @@ void display()
 	glLightfv(GL_LIGHT0, GL_POSITION, light_pos);
 	glLightfv(GL_LIGHT0, GL_AMBIENT, white);
 	glEnable(GL_LIGHT0);
-	glPushMatrix();
+	/*glPushMatrix();
 	glTranslatef(-2.0f, 0, -2.0f);
 	glutSolidTeapot(1);
-	glPopMatrix();
+	glPopMatrix();*/
+	draw_Base();
+	draw_robot();
 	draw_sky();
-	drawGround();
 	glutSwapBuffers();
 
 }
@@ -132,13 +139,11 @@ void init()
 	///开启深度检测
 	glEnable(GL_DEPTH_TEST);
 	///开启面剔除，取消对那些看不到的面的渲染
-	glEnable(GL_CULL_FACE);
-	///设置逆时针的为正面
-	glFrontFace(GL_CCW);
-	///开启颜色混合
-	glEnable(GL_BLEND);
+	//glEnable(GL_CULL_FACE);
+	/*///开启颜色混合
+	glEnable(GL_BLEND);*/
 	///设置以源颜色的alpha，目标颜色的所有进行混合
-	glBlendFunc(GL_SRC_ALPHA, GL_ONE);
+	//glBlendFunc(GL_SRC_ALPHA, GL_ONE);
 	///开启光照，关闭则物体全是昏暗的
 	glEnable(GL_COLOR_MATERIAL);
 }
@@ -155,7 +160,7 @@ int main(int argc, char* argv[])
 	glutInitWindowPosition((screenWidth - WindowWidth) / 2, (screenHeight - WindowHeight) / 2);
 	glutCreateWindow("Industrial Metaverse");
 
-	//init();
+	init();
 	init_texture();
 
 	//注册回调函数
