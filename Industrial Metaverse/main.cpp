@@ -1,4 +1,7 @@
 ﻿#include"header.h"
+#define STB_IMAGE_WRITE_IMPLEMENTATION
+#include "stb_image_write.h"
+
 
 #define PI 3.1415926
 #define WINDOW_WIDTH 1080
@@ -74,6 +77,32 @@ void reshape(int width, int height)
 	glMatrixMode(GL_MODELVIEW);							
 }
 
+
+void captureScreen() {
+	int width = glutGet(GLUT_WINDOW_WIDTH);
+	int height = glutGet(GLUT_WINDOW_HEIGHT);
+
+	// 读取屏幕像素数据
+	unsigned char* pixelData = new unsigned char[width * height * 3];
+	glReadPixels(0, 0, width, height, GL_RGB, GL_UNSIGNED_BYTE, pixelData);
+
+	// 处理像素数据：翻转图像
+	unsigned char* flippedData = new unsigned char[width * height * 3];
+	for (int y = 0; y < height; y++) {
+		memcpy(flippedData + (height - 1 - y) * width * 3,
+			pixelData + y * width * 3,
+			width * 3);
+	}
+
+	// 保存图像
+	stbi_write_png("screenshot.png", width, height, 3, flippedData, width * 3);
+
+	// 清理内存
+	delete[] pixelData;
+	delete[] flippedData;
+}
+
+
 void key(unsigned char k, int x, int y)
 {
 	float moveSpeed = 0.1;
@@ -107,7 +136,12 @@ void key(unsigned char k, int x, int y)
 	case 'e':
 		characterY -= 0.1;					//向下
 		break;
+	case 'P':
+	case 'p':
+		captureScreen();
+		break;
 	}
+
 }
 
 void Mouse(int button, int state, int x, int y)
