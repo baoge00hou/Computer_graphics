@@ -3,6 +3,8 @@
 #define DRAW_SCENE_H
 #include<gl/glut.h>
 
+
+
 //每个物体的绘制都会利用Base
 class Base
 {
@@ -36,4 +38,12 @@ private:
 };
 
 #endif // !DRAW_SCENE
+
+class Circle : public Base {
+public:
+	Circle(GLfloat x, GLfloat y, GLfloat z,GLfloat r = 5.0f) : Base(x, y, z) { m_r = r; }
+	~Circle() { ; }
+	float m_r;
+	void draw() override;
+};
 

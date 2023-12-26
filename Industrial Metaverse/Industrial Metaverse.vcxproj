@@ -129,18 +129,22 @@
   <ItemGroup>
     <ClCompile Include="camera.cpp" />
     <ClCompile Include="draw_scene.cpp" />
+    <ClCompile Include="Forklift.cpp" />
     <ClCompile Include="LightMaterial.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Point.cpp" />
+    <ClCompile Include="robot.cpp" />
     <ClCompile Include="skybox.cpp" />
     <ClCompile Include="texture.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="camera.h" />
     <ClInclude Include="draw_scene.h" />
+    <ClInclude Include="Forklift.h" />
     <ClInclude Include="header.h" />
     <ClInclude Include="LightMaterial.h" />
     <ClInclude Include="Point.h" />
+    <ClInclude Include="robot.h" />
     <ClInclude Include="skybox.h" />
     <ClInclude Include="texture.h" />
   </ItemGroup>

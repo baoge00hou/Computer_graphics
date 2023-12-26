@@ -1,5 +1,7 @@
 ﻿#include"draw_scene.h"
 #include"texture.h"
+#include<math.h>
+#define M_PI 3.1415926
 
 //Ground
 void Ground::draw() {
@@ -32,4 +34,43 @@ void Ground::drawGroundPlane()
     glPopMatrix();
     // 禁用纹理
     glDisable(GL_TEXTURE_2D);
+}
+
+//Circle
+void Circle::draw()
+{
+    glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+    glPushMatrix();
+    glRotatef(45, 1, 1, 0);
+    glTranslatef(m_center_x, m_center_y, m_center_z);
+    glColor3f(0.0f, 1.0f, 0.0f);  // 设置绘制颜色为红色
+    glutSolidSphere(1.0, 50, 50);  // 绘制半径为1的球体，使用20个纬度和经度切片
+
+    //for (int i = 0; i <= 50; ++i) {
+    //    float lat0 = M_PI * (-0.5 + (float)(i - 1) / 50);
+    //    float z0 = sin(lat0);
+    //    float zr0 = cos(lat0);
+
+    //    float lat1 = M_PI * (-0.5 + (float)i / 50);
+    //    float z1 = sin(lat1);
+    //    float zr1 = cos(lat1);
+
+    //    glBegin(GL_QUAD_STRIP);
+    //    for (int j = 0; j <= 50; ++j) {
+    //        float lng = 2 * M_PI * (float)(j - 1) / 50;
+    //        float x = cos(lng);
+    //        float y = sin(lng);
+
+    //        glColor3f(0, 1, 0);  // 设置颜色
+    //        glNormal3f(x * zr0, y * zr0, z0);  // 设置法线
+    //        glVertex3f(x * zr0, y * zr0, z0);  // 设置顶点
+
+    //        glNormal3f(x * zr1, y * zr1, z1);
+    //        glVertex3f(x * zr1, y * zr1, z1);
+    //    }
+    //    glEnd();
+    //}
+    glPopMatrix();
+    // 重置为默认的填充模式
+    glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 }
