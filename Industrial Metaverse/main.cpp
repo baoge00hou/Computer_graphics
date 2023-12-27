@@ -2,7 +2,6 @@
 #define STB_IMAGE_WRITE_IMPLEMENTATION
 #include "stb_image_write.h"
 
-
 #define PI 3.1415926
 #define WINDOW_WIDTH 1080
 #define WINDOW_HEIGHT 960
@@ -15,6 +14,7 @@ float characterZ = 0;	//相机坐标系人物向前移动距离
 Camera camera;					//摄像头实例化
 CSkyBox skybox;					//天空盒实例化						
 LightMaterial lightMaterial;	//光源
+CParticle Snow;					//粒子系统
 
 //窗口大小
 int WindowWidth = WINDOW_WIDTH;	
@@ -55,6 +55,8 @@ void display()
 	glTranslatef(-2.0f, 0, -2.0f);
 	glutSolidTeapot(1);
 	glPopMatrix();*/
+	/** 绘制粒子 */
+	DrawParticle();
 	draw_Base();
 	draw_robot();
 	draw_sky();
@@ -180,6 +182,11 @@ void init()
 	//glBlendFunc(GL_SRC_ALPHA, GL_ONE);
 	///开启光照，关闭则物体全是昏暗的
 	glEnable(GL_COLOR_MATERIAL);
+
+	/** 创建500个粒子 */
+	Snow.Create(100);
+	/** 初始化粒子 */
+	InitSnow();
 }
 
 

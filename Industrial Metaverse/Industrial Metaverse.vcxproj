@@ -128,28 +128,24 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\cg\Computer_graphics-main\Industrial Metaverse\stb_image.cpp" />
-    <ClCompile Include="..\..\..\cg\Computer_graphics-main\Industrial Metaverse\stb_image_resize2.cpp" />
-    <ClCompile Include="..\..\..\cg\Computer_graphics-main\Industrial Metaverse\stb_image_write.cpp" />
     <ClCompile Include="camera.cpp" />
     <ClCompile Include="draw_scene.cpp" />
     <ClCompile Include="Forklift.cpp" />
     <ClCompile Include="LightMaterial.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Particle.cpp" />
     <ClCompile Include="Point.cpp" />
     <ClCompile Include="robot.cpp" />
     <ClCompile Include="skybox.cpp" />
     <ClCompile Include="texture.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\..\cg\Computer_graphics-main\Industrial Metaverse\stb_image.h" />
-    <ClInclude Include="..\..\..\cg\Computer_graphics-main\Industrial Metaverse\stb_image_resize2.h" />
-    <ClInclude Include="..\..\..\cg\Computer_graphics-main\Industrial Metaverse\stb_image_write.h" />
     <ClInclude Include="camera.h" />
     <ClInclude Include="draw_scene.h" />
     <ClInclude Include="Forklift.h" />
     <ClInclude Include="header.h" />
     <ClInclude Include="LightMaterial.h" />
+    <ClInclude Include="Particle.h" />
     <ClInclude Include="Point.h" />
     <ClInclude Include="robot.h" />
     <ClInclude Include="skybox.h" />

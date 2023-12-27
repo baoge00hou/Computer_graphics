@@ -42,13 +42,7 @@
     <ClCompile Include="robot.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\cg\Computer_graphics-main\Industrial Metaverse\stb_image.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\cg\Computer_graphics-main\Industrial Metaverse\stb_image_resize2.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\cg\Computer_graphics-main\Industrial Metaverse\stb_image_write.cpp">
+    <ClCompile Include="Particle.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
@@ -80,13 +74,7 @@
     <ClInclude Include="robot.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\cg\Computer_graphics-main\Industrial Metaverse\stb_image.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\cg\Computer_graphics-main\Industrial Metaverse\stb_image_resize2.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\cg\Computer_graphics-main\Industrial Metaverse\stb_image_write.h">
+    <ClInclude Include="Particle.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>
