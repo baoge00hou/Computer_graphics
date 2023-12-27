@@ -16,9 +16,15 @@ CSkyBox skybox;					//天空盒实例化
 LightMaterial lightMaterial;	//光源
 CParticle Snow;					//粒子系统
 
-//窗口大小原神
+//窗口大小1
 int WindowWidth = WINDOW_WIDTH;	
 int WindowHeight = WINDOW_HEIGHT;
+
+GLfloat matYellowGreen[] = { 0.5, 1, 0.5, 1 };
+GLfloat matWhite[] = { 1, 1, 1, 1 };
+GLfloat matShininess[] = { 50 };
+GLfloat matBlack[] = { 0, 0, 0, 1 };
+
 
 //绘制基本体素
 void draw_Base() {
@@ -38,6 +44,79 @@ void draw_sky()
 
 	skybox.CreateSkyBox(camera.mPos.m_x, camera.mPos.m_y, camera.mPos.m_z, 50, 50, 50);
 }
+void drawRobot()
+{
+	glColor3f(1, 0.78, 0);
+	glMaterialfv(GL_FRONT, GL_AMBIENT, matYellowGreen);
+	glMaterialfv(GL_FRONT, GL_DIFFUSE, matYellowGreen);
+	glMaterialfv(GL_FRONT, GL_SPECULAR, matWhite);
+	glMaterialfv(GL_FRONT, GL_SHININESS, matShininess);
+	glMaterialfv(GL_FRONT, GL_EMISSION, matBlack);
+
+	GLUquadricObj* quadratic;
+	quadratic = gluNewQuadric();
+	gluQuadricNormals(quadratic, GLU_SMOOTH);
+	gluQuadricTexture(quadratic, GL_TRUE);
+
+	glPushMatrix();
+	glTranslatef(8, 1.2, -5);
+	glRotatef(-60, 0, 1, 0);
+	glScalef(1, 1, 1);
+
+	glPushMatrix();
+	glRotatef(90, 1, 0, 0); // Body
+	gluCylinder(quadratic, 1, 1, 1.5, 16, 16);
+	glPopMatrix();
+
+	glPushMatrix();
+	glRotatef(90, 1, 0, 0); // Hand
+	glTranslatef(0, 1.2, 0.3);
+	gluCylinder(quadratic, 0.2, 0.2, 1, 16, 16);
+	glPopMatrix();
+
+	glPushMatrix();
+	glRotatef(90, 1, 0, 0); // Hand
+	glTranslatef(0, -1.2, 0.3);
+	gluCylinder(quadratic, 0.2, 0.2, 1, 16, 16);
+	glPopMatrix();
+
+	glPushMatrix();
+	glRotatef(90, 1, 0, 0); // Foot1
+	glTranslatef(0, 0.5, 1.5);
+	gluCylinder(quadratic, 0.2, 0.2, 1, 16, 16);
+	glPopMatrix();
+
+	glPushMatrix();
+	glRotatef(90, 1, 0, 0); // Foot2
+	glTranslatef(0, -0.5, 1.5);
+	gluCylinder(quadratic, 0.2, 0.2, 1, 16, 16);
+	glPopMatrix();
+
+	glPushMatrix();
+	glTranslatef(0, 1.2, 0.7); // Antenna
+	glRotatef(90, 3, 1.5, 0);
+	gluCylinder(quadratic, 0.1, 0.1, 0.5, 16, 16);
+	glPopMatrix();
+
+	glPushMatrix();
+	glTranslatef(0, 1.2, -0.7); // Antenna
+	glRotatef(90, 3, 1.5, 0);
+	gluCylinder(quadratic, 0.1, 0.1, 0.5, 16, 16);
+	glPopMatrix();
+
+	glPushMatrix();
+	glutSolidSphere(1, 16, 16); // Head
+	glPopMatrix();
+	glPushMatrix();
+
+	glColor3f(1, 0, 0);//eye
+
+	glTranslatef(0.75, 0, -0.5);
+	gluCylinder(quadratic, 0.2, 0.2, 1, 16, 16);
+	glPopMatrix();
+
+	glPopMatrix();
+}
 
 void display()
 {
@@ -56,6 +135,9 @@ void display()
 	glutSolidTeapot(1);
 	glPopMatrix();*/
 	/** 绘制粒子 */
+	glPushMatrix();
+	drawRobot();
+	glPopMatrix();
 	DrawParticle();
 	draw_Base();
 	draw_robot();
