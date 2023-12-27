@@ -16,7 +16,7 @@ CSkyBox skybox;					//天空盒实例化
 LightMaterial lightMaterial;	//光源
 CParticle Snow;					//粒子系统
 
-//窗口大小1
+//窗口大小原神
 int WindowWidth = WINDOW_WIDTH;	
 int WindowHeight = WINDOW_HEIGHT;
 
