@@ -431,7 +431,7 @@ void UpdateSnow()
 }
 
 /** 绘制粒子 */
-void DrawParticle()
+void draw_Particle()
 {
     for (int i = 0; i < Snow.GetNumOfParticle(); ++i)
     {

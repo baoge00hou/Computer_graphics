@@ -22,6 +22,7 @@ public:
 	Point mPos;				// 摄像头位置
 	Point mViewCenter;		// 视点（看向的位置）
 	Point mUP;				// gllookat时最后一个向量
+	bool mIsWorldView;		// 是否在全局视角
 };
 
 

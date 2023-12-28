@@ -24,7 +24,7 @@ int WindowHeight = WINDOW_HEIGHT;
 void draw_Base() {
 	Ground* ground = new Ground(0, 0, 0);
 	ground->draw();
-	Circle* circle = new Circle(0, 0, 0, 2);
+	Circle* circle = new Circle(5, 2, 5, 2);
 	circle->draw();
 }
 
@@ -56,7 +56,8 @@ void display()
 	glutSolidTeapot(1);
 	glPopMatrix();*/
 	/** 绘制粒子 */
-	DrawParticle();
+	draw_Particle();
+	draw_Forklift();
 	draw_Base();
 	draw_robot();
 	draw_sky();
@@ -142,7 +143,12 @@ void key(unsigned char k, int x, int y)
 	case 'p':
 		captureScreen();
 		break;
+	case 'O':
+	case 'o':
+		camera.mIsWorldView = !camera.mIsWorldView;
+		break;
 	}
+
 
 }
 

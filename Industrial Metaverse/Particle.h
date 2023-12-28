@@ -20,7 +20,7 @@ class CParticle
 {
 private:
     Particle* data;               /**< 粒子指针 */
-    int         numparticle;        /**< 粒子数目 */
+    int  numparticle;        /**< 粒子数目 */
 
 public:
     CParticle();          /**< 构造函数 */
@@ -99,7 +99,7 @@ extern int R, G, B;
 extern CParticle Snow;
 void InitSnow();
 void UpdateSnow();
-void DrawParticle();
+void draw_Particle();
 
 
 #endif // _PARTICLES_H
