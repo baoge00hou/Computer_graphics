@@ -117,6 +117,48 @@ void drawRobot()
 
 	glPopMatrix();
 }
+void drawSimpleExcavator() {
+	// 设置铲车的位置
+	float posX = 5.0; // 水平方向位置
+	float posY = -1.0; // 垂直方向位置
+	float posZ = 10.0; // 深度方向位置
+
+	glPushMatrix();
+	glTranslatef(posX, posY, posZ);
+
+	// 铲车车身
+	glPushMatrix();
+	glColor3f(1.0, 0.5, 0.0); // 橙色
+	glTranslatef(0.0, 0.5, 0.0);
+	glScalef(2.0, 1.0, 1.0);
+	glutSolidCube(1.0);
+	glPopMatrix();
+
+	// 车轮
+	glColor3f(0.0, 0.0, 0.0); // 黑色
+	GLUquadricObj* quadratic;
+	quadratic = gluNewQuadric();
+	for (int i = -1; i <= 1; i += 2) {
+		for (int j = -1; j <= 1; j += 2) {
+			glPushMatrix();
+			glTranslatef(i * 1.0, 0.25, j * 0.5);
+			glRotatef(90.0, 0.0, 1.0, 0.0);
+			gluCylinder(quadratic, 0.25, 0.25, 0.5, 12, 12);
+			glPopMatrix();
+		}
+	}
+
+	// 铲斗
+	glPushMatrix();
+	glColor3f(0.5, 0.5, 0.5); // 灰色
+	glTranslatef(1.0, 0.5, 0.0);
+	glRotatef(-30.0, 0.0, 0.0, 1.0);
+	glScalef(0.5, 0.2, 0.5);
+	glutSolidCube(1.0);
+	glPopMatrix();
+
+	glPopMatrix();
+}
 
 void display()
 {
@@ -141,6 +183,7 @@ void display()
 	DrawParticle();
 	draw_Base();
 	draw_robot();
+	drawSimpleExcavator();
 	draw_sky();
 	glutSwapBuffers();
 
