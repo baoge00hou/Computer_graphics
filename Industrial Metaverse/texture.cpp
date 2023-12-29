@@ -85,7 +85,7 @@ void init_texture()
 	texload(2, (char*)"Spot.bmp");
 	texload(3, (char*)"bunny_render.bmp");*/
 
-	//4-9用于天空盒纹理
+	//天空盒纹理
 	texload(4, (char*)"img/back.bmp");
 	texload(5, (char*)"img/front.bmp");
 	texload(6, (char*)"img/down.bmp");
@@ -95,6 +95,22 @@ void init_texture()
 
 	//地面ground
 	texload(10, (char*)"img/ground.bmp");
+
+	//叉车
+		//轮胎
+	texload(11, (char*)"img/tyre.bmp");
+	texload(12, (char*)"img/tyre2.bmp");
+	//车身
+	texload(13, (char*)"img/body.bmp");
+	//cab
+	texload(14, (char*)"img/cab.bmp");
+	//fork1
+	texload(15, (char*)"img/fork1.bmp");
+	//fork2
+	texload(16, (char*)"img/fork2.bmp");
+
+
+
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 }

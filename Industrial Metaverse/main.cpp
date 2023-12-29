@@ -30,7 +30,7 @@ GLfloat matBlack[] = { 0, 0, 0, 1 };
 void draw_Base() {
 	Ground* ground = new Ground(0, 0, 0);
 	ground->draw();
-	Circle* circle = new Circle(0, 0, 0, 2);
+	Circle* circle = new Circle(5, 2, 5, 2);
 	circle->draw();
 }
 
@@ -44,6 +44,7 @@ void draw_sky()
 
 	skybox.CreateSkyBox(camera.mPos.m_x, camera.mPos.m_y, camera.mPos.m_z, 50, 50, 50);
 }
+
 void drawRobot()
 {
 	glColor3f(1, 0.78, 0);
@@ -117,6 +118,7 @@ void drawRobot()
 
 	glPopMatrix();
 }
+
 void drawSimpleExcavator() {
 	// 设置铲车的位置
 	float posX = 5.0; // 水平方向位置
@@ -181,6 +183,7 @@ void display()
 	drawRobot();
 	glPopMatrix();
 	DrawParticle();
+	draw_Forklift();
 	draw_Base();
 	draw_robot();
 	drawSimpleExcavator();
@@ -266,6 +269,10 @@ void key(unsigned char k, int x, int y)
 	case 'P':
 	case 'p':
 		captureScreen();
+		break;
+	case 'O':
+	case 'o':
+		camera.mIsWorldView = !camera.mIsWorldView;
 		break;
 	}
 
