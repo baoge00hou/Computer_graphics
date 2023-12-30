@@ -1,6 +1,11 @@
-﻿#include"header.h"
+#include"header.h"
 #define STB_IMAGE_WRITE_IMPLEMENTATION
 #include "stb_image_write.h"
+
+#include <iostream>
+#define TINYOBJLOADER_IMPLEMENTATION
+#include "tiny_obj_loader.h"
+using namespace tinyobj;
 
 #define PI 3.1415926
 #define WINDOW_WIDTH 1080
@@ -25,6 +30,43 @@ GLfloat matWhite[] = { 1, 1, 1, 1 };
 GLfloat matShininess[] = { 50 };
 GLfloat matBlack[] = { 0, 0, 0, 1 };
 
+//Obj导入
+std::vector<float> vertices;
+std::vector<unsigned int> indices;
+std::vector<tinyobj::shape_t> shapes;
+std::vector<tinyobj::material_t> materials;
+
+void loadObjFile(const std::string& filename) {
+	tinyobj::attrib_t attrib;
+	std::string err; // Declare a string variable to hold possible error messages
+	bool success = tinyobj::LoadObj(&attrib, &shapes, &materials, &err, filename.c_str());
+
+	if (!err.empty()) {
+		std::cerr << "TinyObjLoader: " << err << std::endl;
+	}
+
+	if (!success) {
+		std::cerr << "Failed to load OBJ file" << std::endl;
+		return;
+	}
+
+	for (const auto& shape : shapes) {
+		for (const auto& index : shape.mesh.indices) {
+			int vertexIndex = 3 * index.vertex_index;
+			vertices.push_back(attrib.vertices[vertexIndex]);
+			vertices.push_back(attrib.vertices[vertexIndex + 1]);
+			vertices.push_back(attrib.vertices[vertexIndex + 2]);
+			indices.push_back(indices.size()); // 填充索引
+		}
+	}
+}
+
+void drawObj() {
+	glEnableClientState(GL_VERTEX_ARRAY);
+	glVertexPointer(3, GL_FLOAT, 0, vertices.data()); // 使用data()获取指向数据的指针
+	glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, indices.data()); // 使用data()获取指向数据的指针
+	glDisableClientState(GL_VERTEX_ARRAY);
+}
 
 //绘制基本体素
 void draw_Base() {
@@ -162,6 +204,9 @@ void drawSimpleExcavator() {
 	glPopMatrix();
 }
 
+
+
+
 void display()
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); //清除缓冲
@@ -178,6 +223,11 @@ void display()
 	glTranslatef(-2.0f, 0, -2.0f);
 	glutSolidTeapot(1);
 	glPopMatrix();*/
+
+	glPushMatrix();
+	drawObj(); // Render the loaded OBJ model
+	glPopMatrix();
+
 	/** 绘制粒子 */
 	glPushMatrix();
 	drawRobot();
@@ -344,6 +394,8 @@ int main(int argc, char* argv[])
 	glutKeyboardFunc(key);
 	//glutMotionFunc(onMouseMove);   //鼠标按下才会触发
 	glutPassiveMotionFunc(onMouseMove); //鼠标移动就能触发
+
+	loadObjFile("monkey.obj");
 
 	glutMainLoop();
 	return 0;
