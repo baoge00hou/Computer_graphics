@@ -7,7 +7,7 @@
 #include <stdlib.h>
 
 #define BITMAP_ID 0x4D42
-const int texture_number = 17;
+const int texture_number = 18;
 
 //声明纹理映射
 extern unsigned int texture[texture_number];
