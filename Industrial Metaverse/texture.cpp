@@ -108,7 +108,10 @@ void init_texture()
 	texload(15, (char*)"img/fork1.bmp");
 	//fork2
 	texload(16, (char*)"img/fork2.bmp");
-
+	
+	//球体纹理
+	texload(17, (char*)"/image/circle.bmp");
+        
 
 
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
