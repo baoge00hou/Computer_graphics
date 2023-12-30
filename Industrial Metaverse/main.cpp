@@ -332,7 +332,7 @@ void key(unsigned char k, int x, int y)
 		break;
 
 	case '1':
-		loadObjFile("monkey.obj");
+		loadObjFile("robot2.obj");
 		break;
 	}
 
