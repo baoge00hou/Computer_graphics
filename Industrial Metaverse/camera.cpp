@@ -16,7 +16,7 @@ void Camera::Update()
 	if (!mIsWorldView)
 		mPos.SetPoint(characterX, characterY, characterZ);
 	else
-		mPos.SetPoint(10.0f, 15.0f, 5.0f);		//全局下的视角   
+		mPos.SetPoint(10.0f, 15.0f, 20.0f);		//全局下的视角   
 
 	// 计算相机的观察方向
 	float radianDu = du * c;  // 水平旋转角度转为弧度
