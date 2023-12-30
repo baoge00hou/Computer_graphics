@@ -1,4 +1,4 @@
-﻿#include "LightMaterial.h"
+#include "LightMaterial.h"
 
 #define COLOR_WHITE			1.0f,1.0f,1.0f
 #define COLOR_GREY			0.8f,0.8f,0.8f
@@ -127,9 +127,9 @@ void LightMaterial::setLight()
 	glPopMatrix();
 
 	//1号光源设置（太阳）
-	glLightfv(GL_LIGHT1, GL_AMBIENT, light1_Ambient);
+	/*glLightfv(GL_LIGHT1, GL_AMBIENT, light1_Ambient);
 	glLightfv(GL_LIGHT1, GL_DIFFUSE, light1_Diffuse);
-	glLightfv(GL_LIGHT1, GL_SPECULAR, light1_Specular);
+	glLightfv(GL_LIGHT1, GL_SPECULAR, light1_Specular);*/
 
 	//1号光源绘制
 	glPushMatrix();
@@ -166,9 +166,9 @@ void LightMaterial::setLight()
 		light_Angle++;
 	}
 
-	//glLightfv(GL_LIGHT0, GL_CONSTANT_ATTENUATION, light0_Constant);
-	//glLightfv(GL_LIGHT0, GL_LINEAR_ATTENUATION, light0_Linear);
-	//glLightfv(GL_LIGHT0, GL_QUADRATIC_ATTENUATION, light0_Quadratic);
+	/*glLightfv(GL_LIGHT0, GL_CONSTANT_ATTENUATION, light0_Constant);
+	glLightfv(GL_LIGHT0, GL_LINEAR_ATTENUATION, light0_Linear);
+	glLightfv(GL_LIGHT0, GL_QUADRATIC_ATTENUATION, light0_Quadratic);*/
 }
 
 void LightMaterial::setTorch(GLfloat x, GLfloat y, GLfloat z)
