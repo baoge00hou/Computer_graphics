@@ -3,6 +3,10 @@
 #include<math.h>
 #define M_PI 3.1415926
 
+extern bool textureVisible; // 如果是一个布尔变量
+
+
+
 //Ground
 void Ground::draw() {
     glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
