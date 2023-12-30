@@ -21,6 +21,10 @@ CSkyBox skybox;					//天空盒实例化
 LightMaterial lightMaterial;	//光源
 CParticle Snow;					//粒子系统
 
+// 声明一个全局变量，用于标记纹理是否可见
+bool textureVisible = true;
+
+
 //窗口大小原神
 int WindowWidth = WINDOW_WIDTH;	
 int WindowHeight = WINDOW_HEIGHT;
@@ -285,6 +289,11 @@ void key(unsigned char k, int x, int y)
 	float moveSpeed = 0.1;
 	float radian = du * PI / 180.0;
 	switch (k) {
+	case 'm':
+        case 'M':
+	// 切换纹理可见性状态 
+	textureVisible = !textureVisible;
+	        break;
 	case 'W':
 	case 'w':
 		characterX += moveSpeed * cos(radian); // 向前
