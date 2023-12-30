@@ -35,27 +35,24 @@ std::vector<float> vertices;
 std::vector<unsigned int> indices;
 std::vector<tinyobj::shape_t> shapes;
 std::vector<tinyobj::material_t> materials;
-
 void loadObjFile(const std::string& filename) {
-	tinyobj::attrib_t attrib;
-	std::string err; // Declare a string variable to hold possible error messages
-	bool success = tinyobj::LoadObj(&attrib, &shapes, &materials, &err, filename.c_str());
 
+	tinyobj::attrib_t attrib;
+	std::string err;
+	bool success = tinyobj::LoadObj(&attrib, &shapes, &materials, &err, filename.c_str());
 	if (!err.empty()) {
 		std::cerr << "TinyObjLoader: " << err << std::endl;
 	}
-
 	if (!success) {
 		std::cerr << "Failed to load OBJ file" << std::endl;
 		return;
 	}
-
 	for (const auto& shape : shapes) {
 		for (const auto& index : shape.mesh.indices) {
 			int vertexIndex = 3 * index.vertex_index;
-			vertices.push_back(attrib.vertices[vertexIndex]);
-			vertices.push_back(attrib.vertices[vertexIndex + 1]);
-			vertices.push_back(attrib.vertices[vertexIndex + 2]);
+			vertices.push_back(attrib.vertices[vertexIndex] + characterX);
+			vertices.push_back(attrib.vertices[vertexIndex + 1] + characterY);
+			vertices.push_back(attrib.vertices[vertexIndex + 2] + characterZ);
 			indices.push_back(indices.size()); // 填充索引
 		}
 	}
@@ -324,6 +321,10 @@ void key(unsigned char k, int x, int y)
 	case 'o':
 		camera.mIsWorldView = !camera.mIsWorldView;
 		break;
+
+	case '1':
+		loadObjFile("monkey.obj");
+		break;
 	}
 
 }
@@ -358,8 +359,8 @@ void init()
 	glEnable(GL_DEPTH_TEST);
 	///开启面剔除，取消对那些看不到的面的渲染
 	//glEnable(GL_CULL_FACE);
-	/*///开启颜色混合
-	glEnable(GL_BLEND);*/
+	///开启颜色混合
+	//glEnable(GL_BLEND);
 	///设置以源颜色的alpha，目标颜色的所有进行混合
 	//glBlendFunc(GL_SRC_ALPHA, GL_ONE);
 	///开启光照，关闭则物体全是昏暗的
@@ -395,7 +396,16 @@ int main(int argc, char* argv[])
 	//glutMotionFunc(onMouseMove);   //鼠标按下才会触发
 	glutPassiveMotionFunc(onMouseMove); //鼠标移动就能触发
 
-	loadObjFile("monkey.obj");
+
+	// 调用 setBackGround 方法设置背景颜色
+	lightMaterial.setBackGround();
+	// 调用 setLight 方法设置光源
+	lightMaterial.setLight();
+	// 调用 setTorch 方法设置火炬位置
+	lightMaterial.setTorch(0.0f, 0.0f, 0.0f);
+	// 调用 setMaterial 方法设置材质
+	lightMaterial.setMaterial(0);
+
 
 	glutMainLoop();
 	return 0;
