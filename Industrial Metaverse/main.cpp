@@ -1,4 +1,4 @@
-#include"header.h"
+﻿#include"header.h"
 #define STB_IMAGE_WRITE_IMPLEMENTATION
 #include "stb_image_write.h"
 
@@ -10,6 +10,8 @@ using namespace tinyobj;
 #define PI 3.1415926
 #define WINDOW_WIDTH 1080
 #define WINDOW_HEIGHT 960
+#define BUFSIZE 512
+GLuint selectBuf[BUFSIZE]; // 设置一个选择缓冲区
 int du = 90, OriX = -1, OriY = -1;   //du是视点和x轴的夹角
 float r = 4, h = 0.0;   //r是视点绕y轴的半径，h是视点高度即在y轴上的坐标
 float c = PI / 180.0;    //弧度和角度转换参数
@@ -20,6 +22,7 @@ Camera camera;					//摄像头实例化
 CSkyBox skybox;					//天空盒实例化						
 LightMaterial lightMaterial;	//光源
 CParticle Snow;					//粒子系统
+Bump bump;						//碰撞检测
 
 // 声明一个全局变量，用于标记纹理是否可见
 bool textureVisible = true;
@@ -296,23 +299,39 @@ void key(unsigned char k, int x, int y)
 	        break;
 	case 'W':
 	case 'w':
-		characterX += moveSpeed * cos(radian); // 向前
-		characterZ += moveSpeed * sin(radian);
+		bump.SetPoint(characterX + moveSpeed * cos(radian), 0, characterZ + moveSpeed * sin(radian));
+		if (!bump.bumptest()) 
+		{
+			characterX += moveSpeed * cos(radian); // 向前
+			characterZ += moveSpeed * sin(radian);
+		}
 		break;
 	case 'S':
 	case 's':
-		characterX -= moveSpeed * cos(radian); // 向后
-		characterZ -= moveSpeed * sin(radian);
+		bump.SetPoint(characterX - moveSpeed * cos(radian), 0, characterZ - moveSpeed * sin(radian));
+		if (!bump.bumptest())
+		{
+			characterX -= moveSpeed * cos(radian); // 向后
+			characterZ -= moveSpeed * sin(radian);
+		}
 		break;
 	case 'D':
 	case 'd':
-		characterX -= moveSpeed * sin(radian); // 向右
-		characterZ += moveSpeed * cos(radian);
+		bump.SetPoint(characterX - moveSpeed * sin(radian), 0, characterZ + moveSpeed * cos(radian));
+		if (!bump.bumptest())
+		{
+			characterX -= moveSpeed * sin(radian); // 向右
+			characterZ += moveSpeed * cos(radian);
+		}
 		break;
 	case 'A':
 	case 'a':
-		characterX += moveSpeed * sin(radian); // 向左
-		characterZ -= moveSpeed * cos(radian);
+		bump.SetPoint(characterX + moveSpeed * sin(radian), 0, characterZ - moveSpeed * cos(radian));
+		if (!bump.bumptest())
+		{
+			characterX += moveSpeed * sin(radian); // 向左
+			characterZ -= moveSpeed * cos(radian);
+		}
 		break;
 	case 'Q':
 	case 'q':
@@ -340,14 +359,18 @@ void key(unsigned char k, int x, int y)
 
 void Mouse(int button, int state, int x, int y)
 {
-	if (state == GLUT_DOWN) {
+	if (button != GLUT_LEFT || state != GLUT_DOWN)
+	{
+		return;
+	}
+	/*if (state == GLUT_DOWN) {
 		OriX = x;
 		OriY = y;
 	}
 	else if (state == GLUT_UP) {
 		OriX = -1;
 		OriY = -1;
-	}
+	}*/
 }
 
 void onMouseMove(int x, int y)   //处理鼠标拖动
@@ -375,7 +398,7 @@ void init()
 	///开启光照，关闭则物体全是昏暗的
 	glEnable(GL_COLOR_MATERIAL);
 
-	/** 创建500个粒子 */
+	/** 创建100个粒子 */
 	Snow.Create(100);
 	/** 初始化粒子 */
 	InitSnow();

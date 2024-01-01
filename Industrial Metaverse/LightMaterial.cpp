@@ -1,4 +1,4 @@
-#include "LightMaterial.h"
+﻿#include "LightMaterial.h"
 
 #define COLOR_WHITE			1.0f,1.0f,1.0f
 #define COLOR_GREY			0.8f,0.8f,0.8f
@@ -11,7 +11,6 @@
 #define PI 3.1415926
 
 const GLfloat gloabal_Ambient[] = { 0.0f, 0.0f, 0.0f, 0.0f, 1.0 };        //全局环境光
-
 const GLfloat light0_Ambient[] = { 0.02f, 0.1f, 0.1f, 1.0f };    //环境光，影响没有正对光源的地方，会覆盖材料的漫射光属性
 const GLfloat light0_Diffuse[] = { COLOR_BLUE, 1.0f };            //漫射光，正对光源的地方会显示出漫射光的颜色，会覆盖材料的漫射光属性
 const GLfloat light0_Specular[] = { COLOR_BLUE, 1.0f };            //镜面光，材料必须有对应的反射光属性才会显示

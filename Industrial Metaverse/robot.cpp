@@ -34,10 +34,10 @@ void drawHead() {
 }
 
 void drawChest() {
-    glColor3f(1.0f, 0.7f, 0.1f); // 设置胸部颜色
+    glColor3f(1.0f, 0.7f, 0.1f); 
     glPushMatrix();
-    glTranslatef(0.0f, 1.0f, 0.0f); // 移动到适当位置
-    glScalef(1.4f, 2.0f, 0.5f); // 缩放以适应胸部大小
+    glTranslatef(0.0f, 1.0f, 0.0f); 
+    glScalef(1.4f, 2.0f, 0.5f); 
     glutSolidCube(1.0f);
     glPopMatrix();
 }

@@ -45,6 +45,9 @@
     <ClCompile Include="Particle.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="bump.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="header.h">
@@ -75,6 +78,9 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="Particle.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="bump.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>
