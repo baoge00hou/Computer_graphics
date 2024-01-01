@@ -169,7 +169,7 @@ void draw_Forklift()
 {
     glPushMatrix();
     glEnable(GL_TEXTURE_2D);
-    glTranslatef(1.0f, 0, 1.0f);
+    glTranslatef(2.0f, 0, 2.0f);
     draw_wheel();
     draw_body();
     draw_cab();

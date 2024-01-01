@@ -110,7 +110,7 @@ void init_texture()
 	texload(16, (char*)"img/fork2.bmp");
 	
 	//球体纹理
-	texload(17, (char*)"/image/circle.bmp");
+	texload(17, (char*)"img/circle.bmp");
         
 
 
