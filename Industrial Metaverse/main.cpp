@@ -2,6 +2,10 @@
 #define STB_IMAGE_WRITE_IMPLEMENTATION
 #include "stb_image_write.h"
 
+#define STB_IMAGE_IMPLEMENTATION
+#include "stb_image.h"
+
+
 #include <iostream>
 #define TINYOBJLOADER_IMPLEMENTATION
 #include "tiny_obj_loader.h"
@@ -42,11 +46,46 @@ std::vector<float> vertices;
 std::vector<unsigned int> indices;
 std::vector<tinyobj::shape_t> shapes;
 std::vector<tinyobj::material_t> materials;
-void loadObjFile(const std::string& filename) {
+std::vector<GLuint> materialTextures;
 
+GLuint loadTexture(const std::string& filename, const std::string& basepath) {
+	std::string texturePath = basepath + "/" + filename;
+
+	int width, height, numComponents;
+	unsigned char* data = stbi_load(texturePath.c_str(), &width, &height, &numComponents, 0);
+	if (!data) {
+		std::cerr << "Failed to load texture: " << filename << std::endl;
+		return 0;
+	}
+
+	GLuint textureID;
+	glGenTextures(1, &textureID);
+	glBindTexture(GL_TEXTURE_2D, textureID);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	if (numComponents == 3) {
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
+	}
+	else if (numComponents == 4) {
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
+	}
+
+	
+	//glGenerateMipmap(GL_TEXTURE_2D);
+
+	stbi_image_free(data);
+	return textureID;
+}
+
+
+void loadObjFile(const std::string& filename, const std::string& basepath) {
 	tinyobj::attrib_t attrib;
 	std::string err;
-	bool success = tinyobj::LoadObj(&attrib, &shapes, &materials, &err, filename.c_str());
+	std::string warn;
+	bool success = tinyobj::LoadObj(&attrib, &shapes, &materials, &err, filename.c_str(), basepath.c_str());
+
 	if (!err.empty()) {
 		std::cerr << "TinyObjLoader: " << err << std::endl;
 	}
@@ -54,23 +93,77 @@ void loadObjFile(const std::string& filename) {
 		std::cerr << "Failed to load OBJ file" << std::endl;
 		return;
 	}
+
 	for (const auto& shape : shapes) {
 		for (const auto& index : shape.mesh.indices) {
 			int vertexIndex = 3 * index.vertex_index;
-			vertices.push_back(attrib.vertices[vertexIndex] + characterX);
-			vertices.push_back(attrib.vertices[vertexIndex + 1] + characterY);
-			vertices.push_back(attrib.vertices[vertexIndex + 2] + characterZ);
+			vertices.push_back(attrib.vertices[vertexIndex]+ characterX);
+			vertices.push_back(attrib.vertices[vertexIndex + 1]+ characterY);
+			vertices.push_back(attrib.vertices[vertexIndex + 2]+ characterZ);
 			indices.push_back(indices.size()); // 填充索引
 		}
+	}
+
+	
+	//bool ret = tinyobj::LoadMtl(&materials, &materialMap, &warn, &err, (basepath + "/robot2.mtl").c_str());
+	//bool ret = tinyobj::LoadMtl(&materials, nullptr, &warn, &err, (basepath + "/robot2.mtl").c_str());
+
+	if (!warn.empty()) {
+		std::cout << "TinyObjLoader: " << warn << std::endl;
+	}
+
+	if (!err.empty()) {
+		std::cerr << "TinyObjLoader: " << err << std::endl;
+	}
+
+	/*if (!ret) {
+		std::cerr << "Failed to load MTL file" << std::endl;
+		return;
+	}*/
+
+	for (size_t i = 0; i < materials.size(); i++) {
+		GLuint textureID = loadTexture(materials[i].diffuse_texname, basepath);
+		materialTextures.push_back(textureID);
 	}
 }
 
 void drawObj() {
 	glEnableClientState(GL_VERTEX_ARRAY);
-	glVertexPointer(3, GL_FLOAT, 0, vertices.data()); // 使用data()获取指向数据的指针
-	glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, indices.data()); // 使用data()获取指向数据的指针
+	glVertexPointer(3, GL_FLOAT, 0, vertices.data());
+	glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, indices.data());
 	glDisableClientState(GL_VERTEX_ARRAY);
+
+	// Assuming materials are properly associated with the shapes
+	for (size_t i = 0; i < shapes.size(); i++) {
+		size_t material_id = shapes[i].mesh.material_ids[0];
+		if (material_id >= 0 && material_id < materials.size()) {
+			
+		}
+	}
+
+
+	for (size_t i = 0; i < shapes.size(); i++) {
+		size_t material_id = shapes[i].mesh.material_ids[0];
+		if (material_id >= 0 && material_id < materials.size()) {
+			// Bind the texture for the current material
+			glBindTexture(GL_TEXTURE_2D, materialTextures[material_id]);
+
+			// Set material properties
+			// ... (existing code remains the same)
+			// Here you can use the material data for rendering setup, for example:
+			// Set material ambient color
+			glMaterialfv(GL_FRONT, GL_AMBIENT, &materials[material_id].ambient[0]);
+			// Set material diffuse color
+			glMaterialfv(GL_FRONT, GL_DIFFUSE, &materials[material_id].diffuse[0]);
+			// Set material specular color
+			glMaterialfv(GL_FRONT, GL_SPECULAR, &materials[material_id].specular[0]);
+			// Set material shininess
+			glMaterialf(GL_FRONT, GL_SHININESS, materials[material_id].shininess);
+			// You should set texture mapping and other material properties as needed
+		}
+	}
 }
+
 
 //绘制基本体素
 void draw_Base() {
@@ -351,7 +444,7 @@ void key(unsigned char k, int x, int y)
 		break;
 
 	case '1':
-		loadObjFile("robot2.obj");
+		loadObjFile("robot2.obj","");
 		break;
 	}
 
